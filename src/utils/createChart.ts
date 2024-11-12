@@ -1,9 +1,6 @@
-export {type coordinates, createChart}
+export { createChart}
 
-type coordinates = [
-  x: number,
-  y: number
-]
+import { coordinates } from "../types/index";
 
 function createChart(myChart: any, data: coordinates[]) {
   /* 更新 echarts 实例 */
