@@ -19,7 +19,7 @@ function createChart(myChart: any, data: coordinates[]) {
     },
     series: [
       {
-        data: [...data],
+        data: data,
         type: 'line'
       }
     ]

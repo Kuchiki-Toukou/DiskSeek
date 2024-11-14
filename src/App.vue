@@ -1,21 +1,17 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useTransition, TransitionPresets } from "@vueuse/core";
-import { ProcessRequest, coordinates } from "./types/index";
+import { ProcessRequest, coordinates } from "./types/index.ts";
 import { createChart } from "./utils/createChart";
 import * as echarts from "echarts";
 
-/* 响应式数据 */
-let procNum = ref<number>(0);
-let procList = ref<ProcessRequest[]>([]);
-let currentTrack = ref<number>(0);
 let averageSeekTime = ref<number>(0);
 let choice = ref<string>("FCFS");
 /* vueUse 给数字加动效 */
 const AniAverageSeekLength = useTransition(averageSeekTime, {
   duration: 400,
-  transition: TransitionPresets.easeInExpo
-})
+  transition: TransitionPresets.easeInExpo,
+});
 /* Echarts.js 初始化 */
 const graph = ref(null);
 let myChart = ref<any>(null);
@@ -25,6 +21,10 @@ onMounted(() => {
 });
 
 let initTrack = ref<number>(50);
+/* 响应式数据 */
+let procNum = ref<number>(0);
+let procList = ref<ProcessRequest[]>([]);
+let currentTrack = ref<number>(0);
 function createIORequestQueue() {
   procList.value = [];
   for (let i = 0; i < procNum.value; i++) {
@@ -66,8 +66,10 @@ function FCFS() {
     totalSeekTime += Math.abs(request.requestTrack - currentTrack.value);
     currentTrack.value = request.requestTrack;
   });
-  createChart(myChart.value, data);
-  averageSeekTime.value = totalSeekTime / procList.value.length;
+  if (data.length !== 0) {
+    createChart(myChart.value, data);
+    averageSeekTime.value = totalSeekTime / procList.value.length;
+  }
 }
 
 function SSTF() {
@@ -96,8 +98,10 @@ function SSTF() {
       (req) => req !== closestRequest
     );
   }
-  createChart(myChart.value, data);
-  averageSeekTime.value = totalSeekTime / procList.value.length;
+  if (data.length !== 0) {
+    createChart(myChart.value, data);
+    averageSeekTime.value = totalSeekTime / procList.value.length;
+  }
 }
 
 function SCAN() {
@@ -129,8 +133,10 @@ function SCAN() {
     totalSeekTime += Math.abs(request.requestTrack - currentTrack.value);
     currentTrack.value = request.requestTrack;
   });
-  createChart(myChart.value, data);
-  averageSeekTime.value = totalSeekTime / procList.value.length;
+  if (data.length !== 0) {
+    createChart(myChart.value, data);
+    averageSeekTime.value = totalSeekTime / procList.value.length;
+  }
 }
 
 function CSCAN() {
@@ -164,8 +170,10 @@ function CSCAN() {
     totalSeekTime += Math.abs(request.requestTrack - currentTrack.value);
     currentTrack.value = request.requestTrack;
   });
-  createChart(myChart.value, data);
-  averageSeekTime.value = totalSeekTime / procList.value.length;
+  if (data.length !== 0) {
+    createChart(myChart.value, data);
+    averageSeekTime.value = totalSeekTime / procList.value.length;
+  }
 }
 </script>
 
@@ -222,7 +230,7 @@ function CSCAN() {
     ><br />
     <div
       ref="graph"
-      style="width: 100%; height: 400px; box-shadow: 0 0 8px white"
+      style="width: 400px; height: 400px; box-shadow: 0 0 8px white"
     ></div>
   </div>
 </template>
